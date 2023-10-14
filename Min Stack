@@ -1,0 +1,46 @@
+Statement : 
+Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+Implement the MinStack class:
+MinStack() initializes the stack object.
+void push(int val) pushes the element val onto the stack.
+void pop() removes the element on the top of the stack.
+int top() gets the top element of the stack.
+int getMin() retrieves the minimum element in the stack.
+You must implement a solution with O(1) time complexity for each function.
+
+#include <bits/stdc++.h> 
+// Implement class for minStack.
+class minStack{
+	stack<int> s;
+	int min = INT_MAX;
+	public:		
+		// Function to add another element equal to num at the top of stack.
+		void push(int num){
+			if(num <= min){
+				s.push(min);
+				min = num;
+			};
+			s.push(num);
+		}		
+		// Function to remove the top element of the stack.
+		int pop(){
+			if(s.empty()) return -1;
+			int top = s.top();
+			if(min == s.top()){
+				s.pop();
+				min = s.top();
+			}			
+			s.pop();			
+			return top;
+		}		
+		// Function to return the top element of stack if it is present. Otherwise return -1.
+		int top(){
+			if(s.empty()) return -1;
+			return s.top();
+		}		
+		// Function to return minimum element of stack if it is present. Otherwise return -1.
+		int getMin(){
+			if(s.empty())return -1;
+			return min;
+		}
+};
