@@ -1,0 +1,43 @@
+Statement : 
+Implement Queue using stack data structure instances & its operations.
+
+Code : 
+class Queue {
+    stack<int>s;    
+    public:
+    void enQueue(int val) {
+        s.push(val);
+    }
+    int deQueue() {
+        if(s.empty()) return -1;
+        stack<int> s1;
+        while(!s.empty()){
+            s1.push(s.top());
+            s.pop();
+        }
+        int last = s1.top();
+        s1.pop();
+        while(!s1.empty()){
+            s.push(s1.top());
+            s1.pop();
+        }
+        return last;
+    }
+    int peek() {
+        stack<int> s1;
+        if(s.empty()) return -1;
+        while(!s.empty()){
+            s1.push(s.top());
+            s.pop();
+        }
+        int last = s1.top();
+        while(!s1.empty()){
+            s.push(s1.top());
+            s1.pop();
+        }
+        return last;
+    }
+    bool isEmpty() {
+        return s.empty();
+    }
+};
