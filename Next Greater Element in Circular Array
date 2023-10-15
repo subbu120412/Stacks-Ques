@@ -1,0 +1,50 @@
+Statement : 
+You are given an array 'a' which circular. Consider After last element first element is started again.
+You have to create an array which consists of next greater element of array 'a'
+If no greater element update with '-1'
+
+Sample Input 1 :
+a = [1 5 3 4 2]
+Sample Output 1 :
+[5 -1 4 5 5]
+
+Explanation Of Sample Input 1 :
+For the given array,
+- The next greater element for 1 is 5
+- There is no greater element for 5 on the right side. So we consider NGE as -1.
+- The next greater element for 3 is 4.
+- The next greater element for 4 is 5, when we consider the next elements as 4 -> 2 -> 1 -> 5.
+- The next greater element for 2 is 5, when we consider the next elements as 2 -> 1 -> 5.
+
+Sample Input 2:
+a = [5 5 5 5 5]
+Sample Output 2:
+-1 -1 -1 -1 -1
+
+Expected Time Complexity :
+The expected time complexity is O(n).
+
+Approach : Keep the track of greater elements in stack by traversing from front and reverse of list.
+
+vector<int> nextGreaterElementII(vector<int>& a) {
+    int n = a.size();
+    vector<int>result(n);
+    stack<int> maxS;
+    int index = 0;
+    for(int i=n-1; i>=0; i--){
+        //removing elements from stack if current element is greater or equals to top element of stack
+        while(!maxS.empty() && a[i]>=maxS.top()) maxS.pop();
+        //If stack is empty updating the elements from front side.
+        if(maxS.empty()){
+            while(index<n && a[index] <= a[i]) index++;
+            if(index==n) result[i] = -1;
+            else{
+                result[i] = a[index];
+                maxS.push(a[index]);
+            }            
+        }
+        else result[i] = maxS.top();
+        maxS.push(a[i]);
+    }
+    return result;
+}
