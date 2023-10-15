@@ -1,0 +1,41 @@
+Statement : 
+You are given an array 'a' and size 'n'
+You have to create an array which consists of next greater element of array 'a'
+If no greater element update with '-1'
+
+Sample Input 1:
+a = [1 5 3 4 2]
+Sample Output 1:
+[5 -1 4 -1 -1]
+
+Sample Input 2:
+a = [5 5 5 5 5]
+Sample Output 2:
+[-1 -1 -1 -1 -1]
+
+Expected Time Complexity : The expected time complexity is O(n).
+
+Approach : Keep the track of greater elements in stack by traversing reverse of list.
+Code : 
+#include<stack>
+vector<int> nextGreaterElement(vector<int>& arr, int n){
+	vector<int> result(n);
+	int max = INT_MIN;
+	stack<int> maxE;
+	for(int i=n-1; i>=0; i--){
+    //removing elements from stack if current element is greater or equals to top element of stack
+		while(!maxE.empty() && arr[i] >= maxE.top()){
+			maxE.pop();
+		}
+    //Pusing elements into stack considering them as next greater elements.
+		if(maxE.empty()){
+			result[i] = -1;
+			maxE.push(arr[i]);
+		}
+		else if(arr[i] < maxE.top()){
+			result[i] = maxE.top();
+			maxE.push(arr[i]);
+		}
+	}
+	return result;
+}
