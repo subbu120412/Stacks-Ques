@@ -1,0 +1,90 @@
+Statement : 
+Given n non-negative integers representing an elevation map where the width of each bar is 1,
+compute how much water it can trap after raining.
+
+Sample Input 1:
+4
+2 1 1 4
+Sample Output 1:
+2
+Explanation Of Sample Input 1:
+Water trapped by:
+     block of height 2 is 0 units.
+     block of height 1 is 1 unit.
+     block of height 1 is 3 1 unit. 
+     block of height 4 is 3 0 units.
+
+Hence the total is 2.
+
+Sample Input 2:
+5
+8 1 8 2 4 
+Sample Output 2:
+9
+Explanation Of Sample Input 2:
+Water trapped by:
+     block of height 8 is 0 units.
+     block of height 1 is 7 units.
+     block of height 8 is 0 units. 
+     block of height 2 is 2 units.
+     block of height 4 is 0 units.
+
+Hence the total is 9.
+Expected Time Complexity:
+The expected time complexity is O(n).
+**********************************************************************************************************************
+
+Approach 1: O(n) Time complexity & O(1) space complexity;
+long long getTrappedWater(long long* arr, int n) {
+    int left = 0, right = n-1;
+    long long left_max = 0, right_max = 0;
+    long long result=0;
+    //Calculating at each index.
+    while(left<right){
+        //If left bar is less than right bar we can store at left side.
+        if(arr[left]<arr[right]){
+            //Finding left max height & storable water.
+            if(left_max < arr[left])left_max = arr[left];
+            else result += left_max-arr[left];
+            left++;
+        }
+        //If right bar is greater than left bar we can store at right side.
+        else{
+            //Finding left max height & storable water.
+            if(right_max < arr[right]) right_max = arr[right];
+            else result += right_max-arr[right];
+            right--;
+        }
+    }
+    return result;
+}
+
+**********************************************************************************************************************
+
+Approach 2: O(n) Time complexity & O(n) space complexity;
+
+long long getTrappedWater(long long* arr, int n) {
+    long long result=0;
+    stack<int> indexStack;
+    int i=0;
+    while(i<n){
+        //If stack is empty or stack index top height is greater current index height
+        //We cant store the water in between those indexes. So push current index to stack
+        if(indexStack.empty() || arr[indexStack.top()] >= arr[i]){
+            indexStack.push(i);
+            i++;
+        }
+        //if current element is greater than stack top element there may chance for
+        //storing water so finding how mucn we save between stack indexes & current index.
+        else{
+            int topIndex = indexStack.top();
+            indexStack.pop();
+            int distace = i - (indexStack.empty()?topIndex:indexStack.top())-1;
+            long long maxStorable = min(arr[i], arr[indexStack.empty()?topIndex:indexStack.top()]);
+            long long ActualStorable = maxStorable-arr[topIndex];
+            result = result+ ActualStorable*distace;
+        }
+    }
+    return result;
+}
+
